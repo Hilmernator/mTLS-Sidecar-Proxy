@@ -21,18 +21,24 @@
 
 ```
 .
-├── src/
-│   ├── main.rs          # binary entry‑point for the proxy
-│   ├── proxy.rs         # accept loop, connect_upstream, piping
-│   ├── tls.rs           # cert loading & rustls configs
-│   ├── config.rs        # Clap + Serde YAML loader
-│   └── …
-├── upstream/            # minimal mTLS upstream server (separate crate)
-│   └── src/main.rs
-├── examples/
-│   ├── proxy.yaml
-└── mtls-certs/          # dev certificates for local testing
-    ├── ca.crt  …
+.
+├── mtls-proxy/              # Main proxy crate
+│   ├── Cargo.toml
+│   ├── examples/
+│   │   └── proxy.yaml       # YAML config for the proxy
+│   └── src/
+│       ├── main.rs          # Entry point
+│       ├── config.rs        # Clap + Serde YAML config loader
+│       ├── proxy.rs         # Accept loop, TLS handling, piping
+│       └── tls.rs           # Certificate loading and config
+├── upstream-server/         # Minimal upstream server (also Rust)
+│   ├── Cargo.toml
+│   └── src/main.rs          # Handles incoming mTLS requests
+├── mtls-certs/              # Local dev certificates (gitignored)
+│   ├── ca.crt, server.crt, client.crt, etc.
+├── infra/                   # Terraform IaC (WIP, gitignored)
+│   ├── main.tf, outputs.tf, ...
+└── README.md
 ```
 
 ---
@@ -42,9 +48,9 @@
 ### 1. Clone & build
 
 ```bash
-git clone https://github.com/<you>/mtls-proxy.git
-cd mtls-proxy
-cargo build
+git clone https://github.com/Hilmernator/mTLS-Sidecar-Proxy.git
+cd mTLS-Sidecar-Proxy
+cargo build --manifest-path mtls-proxy/Cargo.toml
 ```
 
 ### 2. Generate dev certificates *(optional)*
@@ -54,13 +60,13 @@ A helper script is provided under `scripts/dev-certs.sh` or use `mkcert`.
 ### 3. Start the upstream server
 
 ```bash
-cargo run --package upstream -- --config examples/upstream.yaml
+cargo run --manifest-path upstream-server/Cargo.toml
 ```
 
 ### 4. Start the proxy
 
 ```bash
-cargo run -- --config examples/proxy.yaml
+cargo run --manifest-path mtls-proxy/Cargo.toml -- --config mtls-proxy/examples/proxy.yaml
 ```
 
 ### 5. Test with cURL

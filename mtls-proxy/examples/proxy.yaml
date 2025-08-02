@@ -1,0 +1,9 @@
+listen: "127.0.0.1:8443"
+upstream: "127.0.0.1:9443"
+
+tls:
+  ca_file: "../mtls-certs/ca.crt"
+  server_cert: "../mtls-certs/server.crt"
+  server_key: "../mtls-certs/server.key"
+  client_cert: "../mtls-certs/client.crt"
+  client_key: "../mtls-certs/client.key"

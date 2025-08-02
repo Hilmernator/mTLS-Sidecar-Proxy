@@ -1,0 +1,3 @@
+# Ignore infrastructure and certificates (local-only)
+infra/
+mtls-certs/

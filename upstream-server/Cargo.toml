@@ -1,0 +1,21 @@
+[package]
+name = "upstream-server"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+tokio-rustls = "0.26.2"
+rustls = "0.23.22"
+rustls-pemfile = "2"
+hyper          = { version = "1.6", features = ["full"] }
+hyper-util     = { version = "0.1.16", features = ["server", "full", "tokio"] }
+anyhow = "1.0"
+tracing          = "0.1"
+tracing-subscriber = { version = "0.3", features = ["fmt", "env-filter"] }      # :contentReference[oaicite:3]{index=3}
+tower = { version = "0.5.2", features = ["make"] }
+tokio-stream = { version = "0.1", features = ["net"] }
+http-body-util = "0.1"
+
+bytes           = "1"
+
